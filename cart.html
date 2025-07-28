@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Photography Portfolio</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/cart.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Ismail Sahal</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#gallery">Gallery</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="cart.html" class="cart-link active">
+                    🛒 Cart <span id="cart-count" class="cart-count">0</span>
+                </a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="cart-main">
+        <div class="container">
+            <h1>Shopping Cart</h1>
+            
+            <!-- Cart Items Section -->
+            <div class="cart-section">
+                <div id="cart-empty" class="cart-empty">
+                    <h3>Your cart is empty</h3>
+                    <p>Browse our gallery and add some beautiful prints to your cart.</p>
+                    <a href="index.html#gallery" class="continue-shopping-btn">Continue Shopping</a>
+                </div>
+                
+                <div id="cart-items" class="cart-items" style="display: none;">
+                    <h2>Your Items</h2>
+                    <div id="cart-list" class="cart-list">
+                        <!-- Cart items will be populated here -->
+                    </div>
+                    
+                    <div class="cart-summary">
+                        <div class="cart-total">
+                            <h3>Total: <span id="cart-total">$0</span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Checkout Section -->
+            <div id="checkout-section" class="checkout-section" style="display: none;">
+                <h2>Checkout</h2>
+                
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-section">
+                        <h3>Contact Information</h3>
+                        <input type="text" id="customer-name" placeholder="Full Name" required>
+                        <input type="email" id="customer-email" placeholder="Email Address" required>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Shipping Address</h3>
+                        <input type="text" id="address-line1" placeholder="Address Line 1" required>
+                        <input type="text" id="address-line2" placeholder="Address Line 2 (Optional)">
+                        <div class="address-row">
+                            <input type="text" id="city" placeholder="City" required>
+                            <input type="text" id="state" placeholder="State/Province" required>
+                            <input type="text" id="postal-code" placeholder="ZIP/Postal Code" required>
+                        </div>
+                        <select id="country" required>
+                            <option value="">Select Country</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="ES">Spain</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="OTHER">Other (Contact for shipping)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Payment Information</h3>
+                        <div id="card-element" class="card-element">
+                            <!-- Stripe Elements will create form here -->
+                        </div>
+                        <div id="card-errors" class="card-errors"></div>
+                    </div>
+                    
+                    <div class="checkout-actions">
+                        <button type="button" id="back-to-cart" class="back-btn">← Back to Cart</button>
+                        <button type="submit" id="place-order" class="place-order-btn">
+                            <span id="button-text">Place Order</span>
+                            <div id="spinner" class="spinner hidden"></div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Order Success -->
+            <div id="order-success" class="order-success" style="display: none;">
+                <div class="success-content">
+                    <h2>✅ Order Placed Successfully!</h2>
+                    <p>Thank you for your purchase. You'll receive an email confirmation shortly with your order details.</p>
+                    <a href="index.html#gallery" class="continue-shopping-btn">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ismail Sahal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="assets/js/cart.js"></script>
+</body>
+</html>

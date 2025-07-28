@@ -218,24 +218,94 @@ function initializeStripe() {
     });
 }
 
-// Purchase photo - show payment form
-function purchasePhoto(photo) {
-    currentPhoto = photo;
-    
-    // Hide buy button, show payment form
-    document.getElementById('buyBtn').style.display = 'none';
-    document.getElementById('payment-form').style.display = 'block';
-    
-    // Mount card element if not already mounted
-    if (!cardElement._mounted) {
-        cardElement.mount('#card-element');
-        cardElement._mounted = true;
+// Cart Management
+let cart = JSON.parse(localStorage.getItem('photographyCart')) || [];
+
+// Update cart count in navigation
+function updateCartCount() {
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+        cartCount.setAttribute('data-count', totalItems);
     }
-    
-    setupPaymentForm();
 }
 
-// Setup payment form event listeners
+// Add item to cart
+function addToCart(photo, printSize, price) {
+    const existingItem = cart.find(item => 
+        item.photoId === photo.id && item.printSize === printSize
+    );
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            photoId: photo.id,
+            photoTitle: photo.title,
+            photoSrc: photo.src,
+            printSize: printSize,
+            price: price,
+            quantity: 1
+        });
+    }
+    
+    localStorage.setItem('photographyCart', JSON.stringify(cart));
+    updateCartCount();
+    
+    // Show success message
+    showAddToCartSuccess(photo.title, printSize);
+}
+
+// Show add to cart success message
+function showAddToCartSuccess(photoTitle, printSize) {
+    const successMsg = document.createElement('div');
+    successMsg.className = 'cart-success-msg';
+    successMsg.innerHTML = `
+        <div style="background: #27ae60; color: white; padding: 1rem; border-radius: 4px; margin: 1rem 0; text-align: center;">
+            ✅ Added "${photoTitle}" (${printSize}) to cart!
+        </div>
+    `;
+    
+    const lightboxInfo = document.querySelector('.lightbox-info');
+    lightboxInfo.insertBefore(successMsg, lightboxInfo.firstChild);
+    
+    setTimeout(() => {
+        successMsg.remove();
+    }, 3000);
+}
+
+// Setup lightbox for add to cart
+function purchasePhoto(photo) {
+    currentPhoto = photo;
+    setupAddToCartForm();
+}
+
+// Setup add to cart form event listeners
+function setupAddToCartForm() {
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const printOptions = document.querySelectorAll('input[name="lightbox-print-size"]');
+    const selectedPriceSpan = document.getElementById('selected-price');
+    
+    // Update price when selection changes
+    printOptions.forEach(option => {
+        option.addEventListener('change', () => {
+            const price = option.dataset.price;
+            selectedPriceSpan.textContent = `$${price}`;
+        });
+    });
+    
+    // Handle add to cart
+    addToCartBtn.addEventListener('click', () => {
+        const selectedOption = document.querySelector('input[name="lightbox-print-size"]:checked');
+        const printSize = selectedOption.value;
+        const price = parseInt(selectedOption.dataset.price);
+        
+        addToCart(currentPhoto, printSize, price);
+    });
+}
+
+// Legacy function - will be removed when Stripe is moved to cart page
 function setupPaymentForm() {
     const form = document.getElementById('payment-form');
     const submitButton = document.getElementById('submit-payment');
@@ -574,5 +644,5 @@ function setupContactForm() {
 document.addEventListener('DOMContentLoaded', () => {
     initGallery();
     setupContactForm();
-    initializeStripe();
+    updateCartCount(); // Initialize cart count display
 });

@@ -18,6 +18,9 @@
                 <li><a href="#gallery">Gallery</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li><a href="cart.html" class="cart-link">
+                    🛒 Cart <span id="cart-count" class="cart-count">0</span>
+                </a></li>
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -101,69 +104,32 @@
                 <p id="lightbox-description"></p>
                 <div class="lightbox-actions">
                     <span class="price" id="lightbox-price"></span>
-                    <button class="buy-btn" id="buyBtn">Purchase Print</button>
+                    <button class="buy-btn" id="buyBtn" style="display: none;">Add to Cart</button>
                 </div>
                 
-                <!-- Payment Form (hidden by default) -->
-                <div id="payment-form" class="payment-form" style="display: none;">
-                    <h4>Complete Your Purchase</h4>
+                <!-- Add to Cart Form -->
+                <div id="add-to-cart-form" class="add-to-cart-form">
+                    <h4>Select Print Size</h4>
                     <div class="print-options">
                         <label class="print-option">
-                            <input type="radio" name="print-size" value="8x10" data-price="25" checked>
+                            <input type="radio" name="lightbox-print-size" value="8x10" data-price="25" checked>
                             <span>8x10 Print - $25</span>
                         </label>
                         <label class="print-option">
-                            <input type="radio" name="print-size" value="11x14" data-price="35">
+                            <input type="radio" name="lightbox-print-size" value="11x14" data-price="35">
                             <span>11x14 Print - $35</span>
                         </label>
                         <label class="print-option">
-                            <input type="radio" name="print-size" value="16x20" data-price="50">
+                            <input type="radio" name="lightbox-print-size" value="16x20" data-price="50">
                             <span>16x20 Print - $50</span>
                         </label>
                     </div>
                     
-                    <div class="customer-info">
-                        <h5>Contact Information</h5>
-                        <input type="text" id="customer-name" placeholder="Full Name" required>
-                        <input type="email" id="customer-email" placeholder="Email Address" required>
-                    </div>
-                    
-                    <div class="shipping-info">
-                        <h5>Shipping Address</h5>
-                        <input type="text" id="address-line1" placeholder="Address Line 1" required>
-                        <input type="text" id="address-line2" placeholder="Address Line 2 (Optional)">
-                        <div class="address-row">
-                            <input type="text" id="city" placeholder="City" required>
-                            <input type="text" id="state" placeholder="State/Province" required>
-                            <input type="text" id="postal-code" placeholder="ZIP/Postal Code" required>
-                        </div>
-                        <select id="country" required>
-                            <option value="">Select Country</option>
-                            <option value="US">United States</option>
-                            <option value="CA">Canada</option>
-                            <option value="GB">United Kingdom</option>
-                            <option value="AU">Australia</option>
-                            <option value="DE">Germany</option>
-                            <option value="FR">France</option>
-                            <option value="IT">Italy</option>
-                            <option value="ES">Spain</option>
-                            <option value="NL">Netherlands</option>
-                            <option value="OTHER">Other (Contact for shipping)</option>
-                        </select>
-                    </div>
-                    
-                    <div id="card-element" class="card-element">
-                        <!-- Stripe Elements will create form here -->
-                    </div>
-                    
-                    <div id="card-errors" class="card-errors"></div>
-                    
-                    <div class="payment-buttons">
-                        <button id="submit-payment" class="submit-payment-btn">
-                            <span id="button-text">Pay Now</span>
-                            <div id="spinner" class="spinner hidden"></div>
+                    <div class="cart-buttons">
+                        <button id="add-to-cart-btn" class="add-to-cart-btn">
+                            Add to Cart - <span id="selected-price">$25</span>
                         </button>
-                        <button id="cancel-payment" class="cancel-payment-btn">Cancel</button>
+                        <a href="cart.html" class="view-cart-btn">View Cart</a>
                     </div>
                 </div>
             </div>
