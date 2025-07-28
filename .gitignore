@@ -1,0 +1,13 @@
+# Local development files
+admin.html
+admin-loader.html
+edit-photo-data.ps1
+resize-images.ps1
+process-images.bat
+pngImagesToConvert/
+*.tmp
+*.log
+
+# System files
+.DS_Store
+Thumbs.db

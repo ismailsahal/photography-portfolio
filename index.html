@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Portfolio</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Ismail Sahal</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>Capturing Life's Beautiful Moments</h1>
+            <p>Professional photographer specializing in landscape and street photography</p>
+            <a href="#gallery" class="cta-button">View My Work</a>
+        </div>
+    </header>
+
+    <section id="gallery" class="gallery-section">
+        <div class="container">
+            <h2>Featured Gallery</h2>
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="landscape">Landscape</button>
+                <button class="filter-btn" data-filter="street">Street</button>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Me</h2>
+                    <p>I'm a passionate photographer with over 5 years of experience capturing the world through my lens. My work focuses on finding beauty in everyday moments and creating images that tell compelling stories.</p>
+                    <p>Available for commissioned work, prints, and photography services.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://via.placeholder.com/400x500" alt="Photographer">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Let's Work Together</h3>
+                    <p>Interested in purchasing prints or booking a session? Use the contact form to get in touch and I'll respond as soon as possible.</p>
+                </div>
+                <form class="contact-form" netlify name="contact" id="contactForm">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <select name="inquiry_type" required>
+                        <option value="">Select inquiry type</option>
+                        <option value="print_purchase">Print Purchase</option>
+                        <option value="photography_session">Photography Session</option>
+                        <option value="general_inquiry">General Inquiry</option>
+                    </select>
+                    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                    <input type="hidden" name="_subject" value="New contact from photography portfolio">
+                    <input type="hidden" name="_next" value="thanks.html">
+                    <button type="submit" id="submitBtn">Send Message</button>
+                    <div id="formStatus" class="form-status"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-description"></p>
+                <div class="lightbox-actions">
+                    <span class="price" id="lightbox-price"></span>
+                    <button class="buy-btn" id="buyBtn">Purchase Print</button>
+                </div>
+            </div>
+        </div>
+        <button class="prev" id="prevBtn">&#10094;</button>
+        <button class="next" id="nextBtn">&#10095;</button>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ismail Sahal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
