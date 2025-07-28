@@ -123,8 +123,33 @@
                     </div>
                     
                     <div class="customer-info">
+                        <h5>Contact Information</h5>
                         <input type="text" id="customer-name" placeholder="Full Name" required>
                         <input type="email" id="customer-email" placeholder="Email Address" required>
+                    </div>
+                    
+                    <div class="shipping-info">
+                        <h5>Shipping Address</h5>
+                        <input type="text" id="address-line1" placeholder="Address Line 1" required>
+                        <input type="text" id="address-line2" placeholder="Address Line 2 (Optional)">
+                        <div class="address-row">
+                            <input type="text" id="city" placeholder="City" required>
+                            <input type="text" id="state" placeholder="State/Province" required>
+                            <input type="text" id="postal-code" placeholder="ZIP/Postal Code" required>
+                        </div>
+                        <select id="country" required>
+                            <option value="">Select Country</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="ES">Spain</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="OTHER">Other (Contact for shipping)</option>
+                        </select>
                     </div>
                     
                     <div id="card-element" class="card-element">

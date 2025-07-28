@@ -290,13 +290,25 @@ async function handlePayment(event) {
     // Get form data
     const customerName = document.getElementById('customer-name').value;
     const customerEmail = document.getElementById('customer-email').value;
+    const addressLine1 = document.getElementById('address-line1').value;
+    const addressLine2 = document.getElementById('address-line2').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const postalCode = document.getElementById('postal-code').value;
+    const country = document.getElementById('country').value;
     const selectedPrint = document.querySelector('input[name="print-size"]:checked');
     const printSize = selectedPrint.value;
     const amount = parseInt(selectedPrint.dataset.price) * 100; // Convert to cents
     
     // Validate form
-    if (!customerName || !customerEmail) {
+    if (!customerName || !customerEmail || !addressLine1 || !city || !state || !postalCode || !country) {
         cardErrors.textContent = 'Please fill in all required fields.';
+        resetButton();
+        return;
+    }
+    
+    if (country === 'OTHER') {
+        cardErrors.textContent = 'Please contact us directly for international shipping to your location.';
         resetButton();
         return;
     }
@@ -307,7 +319,15 @@ async function handlePayment(event) {
         const response = await createPaymentIntent(amount, customerEmail, {
             photoTitle: currentPhoto.title,
             printSize: printSize,
-            customerName: customerName
+            customerName: customerName,
+            shippingAddress: {
+                line1: addressLine1,
+                line2: addressLine2,
+                city: city,
+                state: state,
+                postal_code: postalCode,
+                country: country
+            }
         });
         
         if (response.error) {
@@ -321,6 +341,14 @@ async function handlePayment(event) {
                 billing_details: {
                     name: customerName,
                     email: customerEmail,
+                    address: {
+                        line1: addressLine1,
+                        line2: addressLine2,
+                        city: city,
+                        state: state,
+                        postal_code: postalCode,
+                        country: country,
+                    }
                 },
             }
         });
@@ -354,6 +382,19 @@ function hidePaymentForm() {
     document.getElementById('payment-form').style.display = 'none';
     document.getElementById('buyBtn').style.display = 'block';
     document.getElementById('card-errors').textContent = '';
+    
+    // Clear form fields
+    document.getElementById('customer-name').value = '';
+    document.getElementById('customer-email').value = '';
+    document.getElementById('address-line1').value = '';
+    document.getElementById('address-line2').value = '';
+    document.getElementById('city').value = '';
+    document.getElementById('state').value = '';
+    document.getElementById('postal-code').value = '';
+    document.getElementById('country').value = '';
+    
+    // Reset print size to default
+    document.querySelector('input[name="print-size"][value="8x10"]').checked = true;
 }
 
 // Show payment success

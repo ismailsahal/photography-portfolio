@@ -465,18 +465,50 @@ body {
     color: #3498db;
 }
 
-.customer-info {
+.customer-info,
+.shipping-info {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
-.customer-info input {
+.customer-info h5,
+.shipping-info h5 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.customer-info input,
+.shipping-info input,
+.shipping-info select {
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.customer-info input:focus,
+.shipping-info input:focus,
+.shipping-info select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.address-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .address-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 .card-element {
