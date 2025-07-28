@@ -166,6 +166,10 @@ function openLightbox(index) {
     // Set up buy button with Stripe (placeholder)
     buyBtn.onclick = () => purchasePhoto(photo);
     
+    // Set up add to cart functionality immediately
+    currentPhoto = photo;
+    setupAddToCartForm();
+    
     lightbox.style.display = 'block';
     document.body.style.overflow = 'hidden';
 }
@@ -174,6 +178,19 @@ function openLightbox(index) {
 function closeLightbox() {
     lightbox.style.display = 'none';
     document.body.style.overflow = 'auto';
+    
+    // Clean up any success messages
+    const successMsg = document.querySelector('.cart-success-msg');
+    if (successMsg) {
+        successMsg.remove();
+    }
+    
+    // Reset print size to default
+    const defaultOption = document.querySelector('input[name="lightbox-print-size"][value="8x10"]');
+    if (defaultOption) {
+        defaultOption.checked = true;
+        document.getElementById('selected-price').textContent = '$25';
+    }
 }
 
 // Navigate lightbox
@@ -291,34 +308,46 @@ function setupAddToCartForm() {
     const printOptions = document.querySelectorAll('input[name="lightbox-print-size"]');
     const selectedPriceSpan = document.getElementById('selected-price');
     
-    console.log('Setting up add to cart form for:', currentPhoto.title);
+    console.log('Setting up add to cart form for:', currentPhoto ? currentPhoto.title : 'unknown photo');
     
     if (!addToCartBtn) {
         console.error('Add to cart button not found!');
         return;
     }
     
-    // Remove any existing event listeners by cloning the button
-    const newAddToCartBtn = addToCartBtn.cloneNode(true);
-    addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
+    if (!currentPhoto) {
+        console.error('No current photo set!');
+        return;
+    }
+    
+    // Remove any existing onclick handlers
+    addToCartBtn.onclick = null;
     
     // Update price when selection changes
     printOptions.forEach(option => {
-        option.addEventListener('change', () => {
+        option.onchange = () => {
             const price = option.dataset.price;
             selectedPriceSpan.textContent = `$${price}`;
-        });
+        };
     });
     
     // Handle add to cart
-    newAddToCartBtn.addEventListener('click', () => {
-        console.log('Add to cart button clicked');
+    addToCartBtn.onclick = (e) => {
+        e.preventDefault();
+        console.log('Add to cart button clicked for:', currentPhoto.title);
+        
         const selectedOption = document.querySelector('input[name="lightbox-print-size"]:checked');
+        if (!selectedOption) {
+            console.error('No print size selected!');
+            return;
+        }
+        
         const printSize = selectedOption.value;
         const price = parseInt(selectedOption.dataset.price);
         
+        console.log('Adding to cart:', {printSize, price});
         addToCart(currentPhoto, printSize, price);
-    });
+    };
 }
 
 // Legacy function - will be removed when Stripe is moved to cart page
