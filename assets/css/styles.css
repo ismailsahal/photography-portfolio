@@ -421,6 +421,144 @@ body {
     right: 20px;
 }
 
+/* Payment Form Styles */
+.payment-form {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.payment-form h4 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.print-options {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.print-option {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.print-option:hover {
+    border-color: #3498db;
+    background: #f8f9fa;
+}
+
+.print-option input[type="radio"] {
+    margin-right: 0.75rem;
+}
+
+.print-option input[type="radio"]:checked + span {
+    font-weight: 600;
+    color: #3498db;
+}
+
+.customer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.customer-info input {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.card-element {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    margin-bottom: 1rem;
+}
+
+.card-errors {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-bottom: 1rem;
+    min-height: 20px;
+}
+
+.payment-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.submit-payment-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+.submit-payment-btn:hover {
+    background: #219a52;
+}
+
+.submit-payment-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.cancel-payment-btn {
+    padding: 0.75rem 1.5rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.cancel-payment-btn:hover {
+    background: #c0392b;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 /* Footer */
 footer {
     background: #2c3e50;

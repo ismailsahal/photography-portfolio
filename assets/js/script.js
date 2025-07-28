@@ -192,21 +192,211 @@ function navigateLightbox(direction) {
     buyBtn.onclick = () => purchasePhoto(photo);
 }
 
-// Purchase photo (Stripe integration placeholder)
-function purchasePhoto(photo) {
-    // This will be replaced with actual Stripe integration
-    alert(`Purchase functionality coming soon! You selected: ${photo.title} for ${photo.price}`);
+// Stripe Elements Integration
+let stripe;
+let elements;
+let cardElement;
+let currentPhoto;
+
+// Initialize Stripe (you'll need to replace with your publishable key)
+function initializeStripe() {
+    // Replace 'pk_test_...' with your actual Stripe publishable key
+    stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
+    elements = stripe.elements();
     
-    // Stripe integration would look like this:
-    // stripe.redirectToCheckout({
-    //     lineItems: [{
-    //         price: photo.stripePriceId,
-    //         quantity: 1,
-    //     }],
-    //     mode: 'payment',
-    //     successUrl: window.location.origin + '/success.html',
-    //     cancelUrl: window.location.origin + '/cancel.html',
-    // });
+    // Create card element
+    cardElement = elements.create('card', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': {
+                    color: '#aab7c4',
+                },
+            },
+        },
+    });
+}
+
+// Purchase photo - show payment form
+function purchasePhoto(photo) {
+    currentPhoto = photo;
+    
+    // Hide buy button, show payment form
+    document.getElementById('buyBtn').style.display = 'none';
+    document.getElementById('payment-form').style.display = 'block';
+    
+    // Mount card element if not already mounted
+    if (!cardElement._mounted) {
+        cardElement.mount('#card-element');
+        cardElement._mounted = true;
+    }
+    
+    setupPaymentForm();
+}
+
+// Setup payment form event listeners
+function setupPaymentForm() {
+    const form = document.getElementById('payment-form');
+    const submitButton = document.getElementById('submit-payment');
+    const cancelButton = document.getElementById('cancel-payment');
+    const cardErrors = document.getElementById('card-errors');
+    
+    // Handle real-time validation errors from the card Element
+    cardElement.on('change', ({error}) => {
+        if (error) {
+            cardErrors.textContent = error.message;
+        } else {
+            cardErrors.textContent = '';
+        }
+    });
+    
+    // Handle form submission
+    submitButton.addEventListener('click', handlePayment);
+    
+    // Handle cancel
+    cancelButton.addEventListener('click', () => {
+        hidePaymentForm();
+    });
+    
+    // Update price when print size changes
+    const printOptions = document.querySelectorAll('input[name="print-size"]');
+    printOptions.forEach(option => {
+        option.addEventListener('change', updatePrice);
+    });
+}
+
+// Update price display
+function updatePrice() {
+    const selectedOption = document.querySelector('input[name="print-size"]:checked');
+    const price = selectedOption.dataset.price;
+    document.getElementById('lightbox-price').textContent = `$${price}`;
+}
+
+// Handle payment submission
+async function handlePayment(event) {
+    event.preventDefault();
+    
+    const submitButton = document.getElementById('submit-payment');
+    const buttonText = document.getElementById('button-text');
+    const spinner = document.getElementById('spinner');
+    const cardErrors = document.getElementById('card-errors');
+    
+    // Disable button and show loading
+    submitButton.disabled = true;
+    buttonText.style.display = 'none';
+    spinner.classList.remove('hidden');
+    
+    // Get form data
+    const customerName = document.getElementById('customer-name').value;
+    const customerEmail = document.getElementById('customer-email').value;
+    const selectedPrint = document.querySelector('input[name="print-size"]:checked');
+    const printSize = selectedPrint.value;
+    const amount = parseInt(selectedPrint.dataset.price) * 100; // Convert to cents
+    
+    // Validate form
+    if (!customerName || !customerEmail) {
+        cardErrors.textContent = 'Please fill in all required fields.';
+        resetButton();
+        return;
+    }
+    
+    try {
+        // Create payment intent on your server
+        // For now, we'll simulate this with a placeholder
+        const response = await createPaymentIntent(amount, customerEmail, {
+            photoTitle: currentPhoto.title,
+            printSize: printSize,
+            customerName: customerName
+        });
+        
+        if (response.error) {
+            throw new Error(response.error);
+        }
+        
+        // Confirm payment with Stripe
+        const result = await stripe.confirmCardPayment(response.clientSecret, {
+            payment_method: {
+                card: cardElement,
+                billing_details: {
+                    name: customerName,
+                    email: customerEmail,
+                },
+            }
+        });
+        
+        if (result.error) {
+            cardErrors.textContent = result.error.message;
+        } else {
+            // Payment succeeded
+            showPaymentSuccess();
+        }
+    } catch (error) {
+        cardErrors.textContent = error.message || 'An unexpected error occurred.';
+    }
+    
+    resetButton();
+}
+
+// Reset button state
+function resetButton() {
+    const submitButton = document.getElementById('submit-payment');
+    const buttonText = document.getElementById('button-text');
+    const spinner = document.getElementById('spinner');
+    
+    submitButton.disabled = false;
+    buttonText.style.display = 'inline';
+    spinner.classList.add('hidden');
+}
+
+// Hide payment form
+function hidePaymentForm() {
+    document.getElementById('payment-form').style.display = 'none';
+    document.getElementById('buyBtn').style.display = 'block';
+    document.getElementById('card-errors').textContent = '';
+}
+
+// Show payment success
+function showPaymentSuccess() {
+    const paymentForm = document.getElementById('payment-form');
+    paymentForm.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <h3 style="color: #27ae60; margin-bottom: 1rem;">✅ Payment Successful!</h3>
+            <p>Thank you for your purchase. You'll receive an email confirmation shortly.</p>
+            <button onclick="closeLightbox()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
+        </div>
+    `;
+}
+
+// Create payment intent (placeholder - you'll need a server endpoint)
+async function createPaymentIntent(amount, email, metadata) {
+    // This is a placeholder - you'll need to implement this server-side
+    // For testing, we'll return a dummy response
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve({
+                error: 'Payment processing requires a server. This is a demo version.',
+            });
+        }, 1000);
+    });
+    
+    // Real implementation would look like:
+    /*
+    const response = await fetch('/create-payment-intent', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            amount: amount,
+            currency: 'usd',
+            customer_email: email,
+            metadata: metadata
+        }),
+    });
+    
+    return await response.json();
+    */
 }
 
 // Mobile navigation toggle
@@ -343,4 +533,5 @@ function setupContactForm() {
 document.addEventListener('DOMContentLoaded', () => {
     initGallery();
     setupContactForm();
+    initializeStripe();
 });

@@ -103,6 +103,44 @@
                     <span class="price" id="lightbox-price"></span>
                     <button class="buy-btn" id="buyBtn">Purchase Print</button>
                 </div>
+                
+                <!-- Payment Form (hidden by default) -->
+                <div id="payment-form" class="payment-form" style="display: none;">
+                    <h4>Complete Your Purchase</h4>
+                    <div class="print-options">
+                        <label class="print-option">
+                            <input type="radio" name="print-size" value="8x10" data-price="25" checked>
+                            <span>8x10 Print - $25</span>
+                        </label>
+                        <label class="print-option">
+                            <input type="radio" name="print-size" value="11x14" data-price="35">
+                            <span>11x14 Print - $35</span>
+                        </label>
+                        <label class="print-option">
+                            <input type="radio" name="print-size" value="16x20" data-price="50">
+                            <span>16x20 Print - $50</span>
+                        </label>
+                    </div>
+                    
+                    <div class="customer-info">
+                        <input type="text" id="customer-name" placeholder="Full Name" required>
+                        <input type="email" id="customer-email" placeholder="Email Address" required>
+                    </div>
+                    
+                    <div id="card-element" class="card-element">
+                        <!-- Stripe Elements will create form here -->
+                    </div>
+                    
+                    <div id="card-errors" class="card-errors"></div>
+                    
+                    <div class="payment-buttons">
+                        <button id="submit-payment" class="submit-payment-btn">
+                            <span id="button-text">Pay Now</span>
+                            <div id="spinner" class="spinner hidden"></div>
+                        </button>
+                        <button id="cancel-payment" class="cancel-payment-btn">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
         <button class="prev" id="prevBtn">&#10094;</button>
@@ -115,6 +153,7 @@
         </div>
     </footer>
 
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>
