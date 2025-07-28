@@ -291,7 +291,19 @@ function toggleMobileNav() {
 
 // Refresh cart data from localStorage
 function refreshCartData() {
-    cart = JSON.parse(localStorage.getItem('photographyCart')) || [];
+    const cartData = localStorage.getItem('photographyCart');
+    
+    if (cartData) {
+        try {
+            cart = JSON.parse(cartData);
+        } catch (error) {
+            console.error('Error parsing cart data:', error);
+            cart = [];
+        }
+    } else {
+        cart = [];
+    }
+    
     updateCartCount();
     renderCart();
 }
