@@ -289,15 +289,35 @@ function toggleMobileNav() {
     navMenu.classList.toggle('active');
 }
 
-// Initialize cart page
-document.addEventListener('DOMContentLoaded', () => {
+// Refresh cart data from localStorage
+function refreshCartData() {
+    cart = JSON.parse(localStorage.getItem('photographyCart')) || [];
     updateCartCount();
     renderCart();
+}
+
+// Listen for storage changes (when cart is updated from other tabs/pages)
+window.addEventListener('storage', (e) => {
+    if (e.key === 'photographyCart') {
+        refreshCartData();
+    }
+});
+
+// Initialize cart page
+document.addEventListener('DOMContentLoaded', () => {
+    refreshCartData();
     initializeStripe();
     
     // Setup mobile navigation
     const hamburger = document.querySelector('.hamburger');
     if (hamburger) {
         hamburger.addEventListener('click', toggleMobileNav);
+    }
+});
+
+// Also refresh when page becomes visible (for when user returns to tab)
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        refreshCartData();
     }
 });

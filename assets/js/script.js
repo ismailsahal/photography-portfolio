@@ -253,6 +253,10 @@ function addToCart(photo, printSize, price) {
     localStorage.setItem('photographyCart', JSON.stringify(cart));
     updateCartCount();
     
+    // Debug log
+    console.log('Added to cart:', {photo: photo.title, printSize, price});
+    console.log('Cart now contains:', cart);
+    
     // Show success message
     showAddToCartSuccess(photo.title, printSize);
 }
@@ -287,6 +291,17 @@ function setupAddToCartForm() {
     const printOptions = document.querySelectorAll('input[name="lightbox-print-size"]');
     const selectedPriceSpan = document.getElementById('selected-price');
     
+    console.log('Setting up add to cart form for:', currentPhoto.title);
+    
+    if (!addToCartBtn) {
+        console.error('Add to cart button not found!');
+        return;
+    }
+    
+    // Remove any existing event listeners by cloning the button
+    const newAddToCartBtn = addToCartBtn.cloneNode(true);
+    addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
+    
     // Update price when selection changes
     printOptions.forEach(option => {
         option.addEventListener('change', () => {
@@ -296,7 +311,8 @@ function setupAddToCartForm() {
     });
     
     // Handle add to cart
-    addToCartBtn.addEventListener('click', () => {
+    newAddToCartBtn.addEventListener('click', () => {
+        console.log('Add to cart button clicked');
         const selectedOption = document.querySelector('input[name="lightbox-print-size"]:checked');
         const printSize = selectedOption.value;
         const price = parseInt(selectedOption.dataset.price);
