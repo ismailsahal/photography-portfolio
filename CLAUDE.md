@@ -4,48 +4,175 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a photography portfolio website designed to showcase and sell photography prints. The project is a static website using vanilla HTML, CSS, and JavaScript with a focus on responsive design and e-commerce functionality.
+This is a photography portfolio website designed to showcase and sell photography prints. The project is a multi-page static website using vanilla HTML, CSS, and JavaScript with a complete e-commerce shopping cart system and Stripe integration.
 
 ## Architecture
 
-- **Frontend-only**: Static website with no backend dependencies
+- **Multi-page Frontend**: Static website with multiple pages and no backend dependencies
 - **Gallery System**: JavaScript-driven photo gallery with filtering and lightbox functionality
-- **E-commerce Integration**: Client-side purchase flow (will integrate with payment processor)
+- **Complete E-commerce System**: Full shopping cart with localStorage persistence and Stripe payment integration
+- **Admin Panel**: Password-protected interface for photo management
 - **Responsive Design**: Mobile-first approach using CSS Grid and Flexbox
 
-## Key Components
+## Project Structure
 
-- `index.html`: Main page with navigation, hero, gallery, about, and contact sections
-- `styles.css`: Responsive CSS with mobile-first design
-- `script.js`: Gallery functionality, lightbox, filtering, and purchase flow
-- `images/`: Photo assets organized by category (landscape, portrait, street)
+```
+├── index.html              # Main gallery page with hero, gallery, about, contact
+├── cart.html              # Shopping cart and checkout page
+├── admin.html             # Admin panel for photo management
+├── assets/
+│   ├── css/
+│   │   ├── styles.css     # Main responsive styles
+│   │   └── cart.css       # Cart-specific styles
+│   ├── js/
+│   │   ├── script.js      # Main gallery functionality and cart integration
+│   │   └── cart.js        # Cart page functionality and checkout flow
+│   └── images/
+│       ├── landscape/     # Landscape photography assets
+│       └── street/        # Street photography assets
+├── process-images.bat     # Batch script for image processing
+├── edit-photo-data.ps1    # PowerShell script for photo data management
+└── pngImagesToConvert/    # Temporary folder for image processing
+```
+
+## Key Features
+
+### Gallery System
+- Photo filtering by category (All, Landscape, Street)
+- Lightbox modal with navigation
+- Print size selection (8x10, 11x14, 16x20)
+- Add to cart functionality from lightbox
+
+### Shopping Cart System
+- localStorage-based cart persistence
+- Cart count display in navigation
+- Full cart management (add, remove, quantity)
+- Cross-tab synchronization
+
+### E-commerce Integration
+- **Stripe Elements**: Card payment processing (demo mode)
+- **Checkout Flow**: Customer information and shipping address collection
+- **Order Management**: Success confirmation and cart clearing
+- **Print Options**: Multiple sizes with dynamic pricing
+
+### Admin Panel
+- **Password Protection**: Default password "photo2025"
+- **Photo Management**: Edit titles, descriptions, and prices
+- **Code Export**: Generate updated JavaScript for photo data
+- **Local Storage**: Changes persist in browser until exported
 
 ## Development Commands
 
 Since this is a static website, no build process is required. Simply open `index.html` in a browser for development.
 
 For production deployment:
+- Update Stripe publishable keys in `assets/js/script.js` and `assets/js/cart.js`
 - All assets should be optimized
 - Images should be compressed and sized appropriately
 - Consider using a CDN for image delivery
 
 ## Gallery Data Structure
 
-Photos are managed in JavaScript with the following structure:
+Photos are managed in the `photos` array in `assets/js/script.js`:
 ```javascript
 {
   id: unique_id,
-  src: "path/to/image.jpg",
+  src: "assets/images/category/filename.jpg",
   title: "Photo Title",
-  category: "landscape|portrait|street",
-  price: "$XX",
+  category: "landscape|street",
+  price: "$50",
   description: "Photo description"
 }
 ```
 
-## E-commerce Integration
+## Cart Data Structure
 
-The website includes purchase functionality that will need integration with:
-- Payment processor (Stripe, PayPal, etc.)
-- Print fulfillment service
-- Order management system
+Cart items are stored in localStorage as:
+```javascript
+{
+  photoId: number,
+  photoTitle: string,
+  photoSrc: string,
+  printSize: "8x10|11x14|16x20",
+  price: number,
+  quantity: number
+}
+```
+
+## Recent Development Status
+
+### ✅ Completed Features:
+- Complete shopping cart system with localStorage persistence
+- Stripe Elements integration (demo mode)
+- Cart navigation and localStorage handling
+- Add to cart button functionality
+- Shipping address collection to payment form
+- Admin panel for photo management with password protection
+
+### 🆕 Latest Session Progress (Current):
+- **Node.js Backend Server**: Complete Express.js server with Stripe integration
+- **Payment Processing**: Server-side payment intent creation endpoint
+- **Environment Configuration**: Secure API key management with .env
+- **Frontend Integration**: Updated JavaScript to connect to backend server
+- **CORS Configuration**: Proper cross-origin setup for development and production
+- **Custom Domain Setup**: Guidance for Netlify deployment with custom domain
+- **Documentation**: Complete README with setup and deployment instructions
+
+## Technical Implementation
+
+### Backend Architecture (`server.js`):
+- **Express.js Server** on port 3001
+- **Stripe Payment Intents API** for secure payment processing
+- **CORS enabled** for frontend-backend communication
+- **Environment variable security** for API keys
+- **Health check endpoint** for monitoring
+- **Webhook support** for payment event handling
+
+### Payment Flow:
+1. Frontend collects customer and payment information
+2. Creates payment intent via `/create-payment-intent` endpoint
+3. Stripe Elements handles secure card processing
+4. Server confirms payment and handles success/failure
+
+### Environment Variables:
+```
+STRIPE_SECRET_KEY=sk_test_... (from Stripe Dashboard)
+STRIPE_PUBLISHABLE_KEY=pk_test_... (from Stripe Dashboard)
+PORT=3001
+NODE_ENV=development
+FRONTEND_URL=http://localhost:8080
+```
+
+## Development Workflow
+
+### Local Development:
+1. `npm install` - Install dependencies
+2. Configure `.env` with Stripe test keys
+3. `npm run dev` - Start development server
+4. Open `index.html` in browser for frontend
+
+### Testing:
+- Use Stripe test card numbers (4242 4242 4242 4242)
+- Server health check: `http://localhost:3001/health`
+- Payment processing endpoint: `http://localhost:3001/create-payment-intent`
+
+## Next Steps for Production
+
+### Immediate (Ready to Deploy):
+1. **Get Stripe Account**: Sign up and get test API keys
+2. **Test Payment Flow**: Verify complete checkout process
+3. **Custom Domain**: Already configured for Netlify deployment
+
+### Production Deployment:
+1. **Server Hosting**: Deploy Node.js server (Heroku, Railway, or Netlify Functions)
+2. **Live Stripe Keys**: Switch from test to production keys
+3. **Environment Variables**: Set production secrets in hosting platform
+4. **CORS Update**: Add production domain to allowed origins
+5. **SSL Certificate**: Ensure HTTPS for payment security
+
+### Future Enhancements:
+1. **Order Management**: Database for order tracking
+2. **Email Notifications**: Automated confirmation emails
+3. **Print Fulfillment**: Integration with printing service
+4. **Inventory Management**: Stock tracking system
+5. **Analytics**: Sales and performance tracking

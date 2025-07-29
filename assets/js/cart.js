@@ -5,10 +5,21 @@ let stripe;
 let elements;
 let cardElement;
 
-// Initialize Stripe (replace with your publishable key)
-function initializeStripe() {
-    stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
-    elements = stripe.elements();
+// Initialize Stripe (gets key from server)
+async function initializeStripe() {
+    try {
+        // Get publishable key from server
+        const response = await fetch('/config');
+        const { publishableKey } = await response.json();
+        
+        stripe = Stripe(publishableKey);
+        elements = stripe.elements();
+    } catch (error) {
+        console.error('Error initializing Stripe:', error);
+        // Fallback to hardcoded key for development
+        stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
+        elements = stripe.elements();
+    }
     
     cardElement = elements.create('card', {
         style: {
@@ -251,35 +262,32 @@ function showOrderSuccess() {
     updateCartCount();
 }
 
-// Create payment intent (placeholder - you'll need a server endpoint)
+// Create payment intent
 async function createPaymentIntent(amount, email, metadata) {
-    // This is a placeholder - you'll need to implement this server-side
-    // For testing, we'll return a dummy response
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                error: 'Payment processing requires a server. This is a demo version.',
-            });
-        }, 1000);
-    });
-    
-    // Real implementation would look like:
-    /*
-    const response = await fetch('/create-payment-intent', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            amount: amount,
-            currency: 'usd',
-            customer_email: email,
-            metadata: metadata
-        }),
-    });
-    
-    return await response.json();
-    */
+    try {
+        const response = await fetch('/create-payment-intent', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: amount,
+                currency: 'usd',
+                customer_email: email,
+                metadata: metadata
+            }),
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Server error');
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error creating payment intent:', error);
+        return { error: error.message };
+    }
 }
 
 // Mobile navigation toggle
@@ -316,9 +324,9 @@ window.addEventListener('storage', (e) => {
 });
 
 // Initialize cart page
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     refreshCartData();
-    initializeStripe();
+    await initializeStripe();
     
     // Setup mobile navigation
     const hamburger = document.querySelector('.hamburger');

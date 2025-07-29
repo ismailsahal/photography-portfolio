@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .admin-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .admin-content {
+            padding: 20px;
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .photo-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+        
+        .photo-preview {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .photo-form {
+            padding: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            height: 60px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .category-landscape {
+            background: #e8f5e8;
+            color: #2d5a2d;
+        }
+        
+        .category-street {
+            background: #e8f2ff;
+            color: #1e4d72;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #219a52;
+        }
+        
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        
+        .export-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .export-section h3 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .code-output {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .status-message {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h4 {
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        /* Password Protection Styles */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .password-modal {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .password-modal h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .password-modal p {
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        .password-modal input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .password-modal input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .password-error {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-modal">
+            <h2>🔐 Admin Access Required</h2>
+            <p>Enter the admin password to continue:</p>
+            <form id="passwordForm">
+                <input type="password" id="passwordInput" placeholder="Enter password" required>
+                <button type="submit" class="btn btn-primary">Access Admin</button>
+            </form>
+            <div id="passwordError" class="password-error"></div>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContent" style="display: none;">
+        <div class="admin-header">
+            <h1>📸 Photography Portfolio Admin</h1>
+            <p>Manage your photo gallery data</p>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+        
+        <div class="admin-content">
+            <div class="instructions">
+                <h4>📋 How to Use This Admin Panel:</h4>
+                <ol>
+                    <li>Edit photo titles, descriptions, and prices below</li>
+                    <li>Click "Save Changes" to store locally</li>
+                    <li>Click "Export Code" to generate updated JavaScript</li>
+                    <li>Copy the exported code and replace the photos array in assets/js/script.js</li>
+                    <li>Upload the updated script.js to your web hosting</li>
+                </ol>
+            </div>
+            
+            <div id="statusMessage"></div>
+            
+            <div class="actions">
+                <button class="btn btn-primary" onclick="loadPhotos()">🔄 Reload Photos</button>
+                <button class="btn btn-success" onclick="saveChanges()">💾 Save Changes</button>
+                <button class="btn btn-warning" onclick="exportCode()">📤 Export Code</button>
+            </div>
+            
+            <div id="photoGrid" class="photo-grid">
+                <!-- Photos will be loaded here -->
+            </div>
+            
+            <div class="export-section" id="exportSection" style="display: none;">
+                <h3>📤 Exported JavaScript Code</h3>
+                <p>Copy this code and replace the photos array in your assets/js/script.js file:</p>
+                <div id="codeOutput" class="code-output"></div>
+                <button class="btn btn-primary" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/script.js"></script>
+    <script>
+        // Password Protection
+        const ADMIN_PASSWORD = "photo2025"; // Change this to your desired password
+        let isAuthenticated = false;
+        let adminPhotos = [];
+        
+        // Check authentication on page load
+        function checkAuth() {
+            const authTime = localStorage.getItem('adminAuthTime');
+            const now = new Date().getTime();
+            
+            // Authentication expires after 2 hours
+            if (authTime && (now - parseInt(authTime)) < 2 * 60 * 60 * 1000) {
+                isAuthenticated = true;
+                showAdminPanel();
+            } else {
+                showPasswordPrompt();
+            }
+        }
+        
+        // Show password prompt
+        function showPasswordPrompt() {
+            document.getElementById('passwordOverlay').style.display = 'flex';
+            document.getElementById('adminContent').style.display = 'none';
+        }
+        
+        // Show admin panel
+        function showAdminPanel() {
+            document.getElementById('passwordOverlay').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+        }
+        
+        // Handle password form submission
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enteredPassword = document.getElementById('passwordInput').value;
+            const errorDiv = document.getElementById('passwordError');
+            
+            if (enteredPassword === ADMIN_PASSWORD) {
+                isAuthenticated = true;
+                localStorage.setItem('adminAuthTime', new Date().getTime().toString());
+                showAdminPanel();
+                loadPhotos();
+                errorDiv.style.display = 'none';
+            } else {
+                errorDiv.textContent = 'Incorrect password. Please try again.';
+                errorDiv.style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            isAuthenticated = false;
+            localStorage.removeItem('adminAuthTime');
+            localStorage.removeItem('adminPhotos');
+            showPasswordPrompt();
+            document.getElementById('passwordInput').value = '';
+        }
+        
+        // Initialize authentication check
+        document.addEventListener('DOMContentLoaded', checkAuth);
+        
+        // Load photos from main script
+        function loadPhotos() {
+            adminPhotos = JSON.parse(JSON.stringify(photos)); // Deep clone
+            
+            // Try to load saved changes from localStorage
+            const savedPhotos = localStorage.getItem('adminPhotos');
+            if (savedPhotos) {
+                adminPhotos = JSON.parse(savedPhotos);
+                showStatus('Loaded saved changes from browser storage', 'info');
+            } else {
+                showStatus('Loaded photos from main script', 'info');
+            }
+            
+            renderPhotoGrid();
+        }
+        
+        // Render photo editing grid
+        function renderPhotoGrid() {
+            const grid = document.getElementById('photoGrid');
+            grid.innerHTML = '';
+            
+            adminPhotos.forEach((photo, index) => {
+                const photoCard = document.createElement('div');
+                photoCard.className = 'photo-card';
+                photoCard.innerHTML = `
+                    <img src="${photo.src}" alt="${photo.title}" class="photo-preview" onerror="this.style.display='none'">
+                    <div class="photo-form">
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <span class="category-badge category-${photo.category}">${photo.category}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="title-${index}">Title:</label>
+                            <input type="text" id="title-${index}" value="${photo.title}" onchange="updatePhoto(${index}, 'title', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label for="description-${index}">Description:</label>
+                            <textarea id="description-${index}" onchange="updatePhoto(${index}, 'description', this.value)">${photo.description}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="price-${index}">Price:</label>
+                            <input type="text" id="price-${index}" value="${photo.price}" onchange="updatePhoto(${index}, 'price', this.value)">
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(photoCard);
+            });
+        }
+        
+        // Update photo data
+        function updatePhoto(index, field, value) {
+            if (field === 'price' && !value.startsWith('$') && value.trim() !== '') {
+                value = '$' + value.replace('$', '');
+            }
+            adminPhotos[index][field] = value;
+        }
+        
+        // Save changes to localStorage
+        function saveChanges() {
+            localStorage.setItem('adminPhotos', JSON.stringify(adminPhotos));
+            showStatus('Changes saved successfully! Remember to export and update your main script.js file.', 'success');
+        }
+        
+        // Export JavaScript code
+        function exportCode() {
+            let code = '// Your actual photo data\nconst photos = [\n';
+            
+            adminPhotos.forEach((photo, index) => {
+                const escapedTitle = photo.title.replace(/'/g, "\\'");
+                const escapedDescription = photo.description.replace(/'/g, "\\'");
+                
+                code += `    {\n`;
+                code += `        id: ${photo.id},\n`;
+                code += `        src: '${photo.src}',\n`;
+                code += `        title: '${escapedTitle}',\n`;
+                code += `        category: '${photo.category}',\n`;
+                code += `        price: '${photo.price}',\n`;
+                code += `        description: '${escapedDescription}'\n`;
+                code += `    }`;
+                
+                if (index < adminPhotos.length - 1) {
+                    code += ',';
+                }
+                code += '\n';
+            });
+            
+            code += '];';
+            
+            document.getElementById('codeOutput').textContent = code;
+            document.getElementById('exportSection').style.display = 'block';
+            showStatus('Code exported successfully! Copy and paste it to your script.js file.', 'success');
+        }
+        
+        // Copy to clipboard
+        function copyToClipboard() {
+            const codeOutput = document.getElementById('codeOutput');
+            const text = codeOutput.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showStatus('Code copied to clipboard!', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showStatus('Code copied to clipboard!', 'success');
+            });
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadPhotos);
+    </script>
+</body>
+</html>
