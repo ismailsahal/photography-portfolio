@@ -568,9 +568,123 @@ body {
     gap: 0.75rem;
 }
 
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: white;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        z-index: 1000;
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-menu li {
+        margin: 1rem 0;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    /* Mobile Lightbox Fixes */
+    .lightbox-content {
+        margin: 2% auto;
+        max-width: 95%;
+        max-height: 95%;
+        flex-direction: column;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .lightbox-content img {
+        max-width: 100%;
+        max-height: 50vh;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .lightbox-info {
+        padding: 1.5rem;
+        flex: none;
+        overflow-y: auto;
+        max-height: 45vh;
+    }
+
+    .lightbox-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .close {
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        z-index: 2001;
+    }
+
+    .prev, .next {
+        top: 25%;
+        padding: 0.75rem;
+        font-size: 16px;
+    }
+
+    .prev {
+        left: 10px;
+    }
+
+    .next {
+        right: 10px;
+    }
+
+    /* Mobile Cart Form */
+    .cart-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .print-options {
+        gap: 0.75rem;
+    }
+
+    .print-option {
+        padding: 1rem;
+        font-size: 16px;
+    }
+
+    .add-to-cart-btn,
+    .view-cart-btn {
+        padding: 1rem;
+        font-size: 16px;
+        text-align: center;
+        min-height: 48px;
+    }
+
     .address-row {
         grid-template-columns: 1fr;
+    }
+
+    /* Gallery adjustments */
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
     }
 }
 
