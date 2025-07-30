@@ -601,6 +601,10 @@ body {
         margin: 1rem 0;
     }
 
+    .cart-link {
+        justify-content: center;
+    }
+
     .hamburger {
         display: flex;
     }
