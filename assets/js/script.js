@@ -7,7 +7,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0173-1.jpg',
         title: 'River Through the City',
         category: 'landscape',
-        price: '$50',
         description: 'A ferry passing throught the Chicago River'
     },
     {
@@ -15,7 +14,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0299-1-2.jpg',
         title: 'A Storm is Coming',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -23,7 +21,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0302-1.jpg',
         title: 'The Red Bridge',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -31,7 +28,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0327-1-3.jpg',
         title: 'Layers of Stones',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -39,7 +35,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0374-1.jpg',
         title: 'Water is Blue',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -47,7 +42,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0550-1-2.jpg',
         title: 'The Moon Table',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -55,7 +49,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0566-1-4.jpg',
         title: 'High and Cold',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -63,7 +56,6 @@ const photos = [
         src: 'assets/images/landscape/DSC_0638-1-2.jpg',
         title: 'Hidden Lamp',
         category: 'landscape',
-        price: '$50',
         description: 'A stunning landscape capture showcasing the beauty of nature.'
     },
     {
@@ -71,7 +63,6 @@ const photos = [
         src: 'assets/images/street/DSC_0214-1.jpg',
         title: 'Jazz in the Park',
         category: 'street',
-        price: '$50',
         description: 'Urban life captured in a candid street photography moment.'
     },
     {
@@ -79,7 +70,6 @@ const photos = [
         src: 'assets/images/street/DSC_0524-1.jpg',
         title: 'Caged Memory',
         category: 'street',
-        price: '$50',
         description: 'Urban life captured in a candid street photography moment.'
     },
     {
@@ -87,7 +77,6 @@ const photos = [
         src: 'assets/images/street/DSC_0528-1.jpg',
         title: 'Modern Memory',
         category: 'street',
-        price: '$50',
         description: 'Urban life captured in a candid street photography moment.'
     },
     {
@@ -95,7 +84,6 @@ const photos = [
         src: 'assets/images/street/DSC_0771-1-2.jpg',
         title: 'Cold',
         category: 'street',
-        price: '$50',
         description: 'Urban life captured in a candid street photography moment.'
     }
 ];
@@ -110,7 +98,6 @@ const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const lightboxTitle = document.getElementById('lightbox-title');
 const lightboxDescription = document.getElementById('lightbox-description');
-const lightboxPrice = document.getElementById('lightbox-price');
 const buyBtn = document.getElementById('buyBtn');
 const closeBtn = document.querySelector('.close');
 const prevBtn = document.getElementById('prevBtn');
@@ -135,7 +122,6 @@ function renderGallery(photosToRender) {
             <div class="gallery-item-info">
                 <h3>${photo.title}</h3>
                 <p>${photo.description}</p>
-                <span class="price">${photo.price}</span>
             </div>
         `;
         galleryItem.addEventListener('click', () => openLightbox(index));
@@ -161,7 +147,6 @@ function openLightbox(index) {
     lightboxImg.src = photo.src;
     lightboxTitle.textContent = photo.title;
     lightboxDescription.textContent = photo.description;
-    lightboxPrice.textContent = photo.price;
     
     // Set up buy button with Stripe (placeholder)
     buyBtn.onclick = () => purchasePhoto(photo);
@@ -205,7 +190,6 @@ function navigateLightbox(direction) {
     lightboxImg.src = photo.src;
     lightboxTitle.textContent = photo.title;
     lightboxDescription.textContent = photo.description;
-    lightboxPrice.textContent = photo.price;
     buyBtn.onclick = () => purchasePhoto(photo);
 }
 
