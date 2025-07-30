@@ -614,8 +614,8 @@ function setupEventListeners() {
     // Mobile navigation
     hamburger.addEventListener('click', toggleMobileNav);
     
-    // Smooth scrolling for navigation links (exclude cart link)
-    document.querySelectorAll('.nav-menu a:not(.cart-link), .cta-button').forEach(link => {
+    // Smooth scrolling for navigation links (exclude cart link) and logo
+    document.querySelectorAll('.nav-menu a:not(.cart-link), .cta-button, .logo a').forEach(link => {
         link.addEventListener('click', smoothScroll);
     });
     
