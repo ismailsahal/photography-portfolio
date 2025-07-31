@@ -110,13 +110,48 @@ Cart items are stored in localStorage as:
 - Admin panel for photo management with password protection
 
 ### 🆕 Latest Session Progress (Current):
-- **Node.js Backend Server**: Complete Express.js server with Stripe integration
+- **Mobile UX Optimization**: Complete mobile lightbox redesign with proper scaling and scrolling
+- **Dynamic Pricing System**: Removed hardcoded $50 prices, now uses print size selection (8x10-$25, 11x14-$35, 16x20-$50)
+- **Navigation Improvements**: Clickable logo button across all pages with smooth scroll to home
+- **Mobile Menu Fixes**: Properly centered cart button in hamburger menu
+- **Branch Management**: Development work on `mobile-lightbox-fix` branch, main branch contains stable Node.js integration
+
+### ✅ Previous Session Achievements:
+- **Node.js Backend Server**: Complete Express.js server with Stripe integration  
 - **Payment Processing**: Server-side payment intent creation endpoint
 - **Environment Configuration**: Secure API key management with .env
 - **Frontend Integration**: Updated JavaScript to connect to backend server
 - **CORS Configuration**: Proper cross-origin setup for development and production
 - **Custom Domain Setup**: Guidance for Netlify deployment with custom domain
 - **Documentation**: Complete README with setup and deployment instructions
+
+## Current Development Status
+
+### 🚧 Active Development Branch: `mobile-lightbox-fix`
+The project is currently on a development branch with the following improvements:
+
+#### Mobile Responsiveness Enhancements:
+- **Lightbox Mobile Fix**: Fixed scaling and scrolling issues on mobile devices
+  - Changed from horizontal to vertical layout on mobile screens
+  - Added proper image scaling with `max-height: 50vh`
+  - Enabled touch-friendly scrolling with overflow handling
+  
+#### UI/UX Improvements:
+- **Dynamic Pricing**: Removed all hardcoded "$50" price displays
+  - Gallery items show only title and description
+  - Pricing handled entirely through print size selection in lightbox
+  - Clean, professional appearance without confusing price tags
+
+- **Navigation Enhancements**: 
+  - "Ismail Sahal" logo is now clickable on all pages
+  - Smooth scroll to home section on index.html
+  - Direct link to index.html from cart.html
+  - Mobile hamburger menu cart button properly centered
+
+#### Branch Status:
+- ✅ **Main Branch**: Contains stable Node.js backend integration, ready for production
+- 🚧 **mobile-lightbox-fix**: Contains latest mobile UX improvements, ready for testing/merge
+- 📋 **Next**: Merge mobile improvements back to main after testing
 
 ## Technical Implementation
 
